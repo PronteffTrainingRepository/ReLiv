@@ -12,14 +12,14 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   StatusBar,
+  Picker,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-
-
+// import DateTimePicker from "@react-native-community/datetimepicker";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
@@ -34,12 +34,36 @@ class Registration extends Component {
     super(props);
 
     this.state = {
-      image: null,
+      image: "null",
+      // dates: new date(),
+      // mode: "",
+      // show: "",
+      // selectedValue:"java",
     };
+    //const [selectedValue, setSelectedValue] = useState("java");
+    // const onChange = (event, selectedDate) => {
+    //   const currentDate = selectedDate || date;
+    //   setShow(Platform.OS === "ios");
+    //   setDate(currentDate);
+    // };
+
+    // const showMode = (currentMode) => {
+    //   setShow(true);
+    //   setMode(currentMode);
+    // };
+
+    // const showDatepicker = () => {
+    //   showMode("date");
+    // };
+
+    // const showTimepicker = () => {
+    //   showMode("time");
+    // };
   }
 
   render() {
     let { image } = this.state;
+    let { selectedValue } = this.state;
 
     const keyboardVerticalOffset =
       Platform.OS === "android" ? -ht * 0.25 : -ht * 0.1;
@@ -74,9 +98,10 @@ class Registration extends Component {
                 <Text
                   style={{
                     color: "white",
-                    fontSize: ht * 0.03,
-                    paddingLeft: wd * 0.06,
-                    opacity: 0.9,
+                    fontSize: ht * 0.0273,
+                    paddingLeft: wd * 0.038,
+                    paddingTop: wd * 0.025,
+                    opacity: 0.76,
                   }}
                 >
                   Registration
@@ -85,11 +110,10 @@ class Registration extends Component {
               {/* Header Of Form Ends */}
 
               {/* Image Picker Section Starts */}
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ marginLeft: wd * 0.048, marginTop: ht * 0.03 }}>
+              <View style={{ flexDirection: "row", height: ht * 0.16 }}>
+                <View style={{ marginLeft: wd * 0.038, marginTop: ht * 0.045 }}>
                   <Text
                     style={{
-                      fontStyle: "italic",
                       fontWeight: "bold",
                       opacity: 0.5,
                       fontSize: ht * 0.02,
@@ -104,7 +128,6 @@ class Registration extends Component {
                   >
                     <Text
                       style={{
-                        fontStyle: "italic",
                         fontWeight: "bold",
                         opacity: 0.5,
                         fontSize: ht * 0.02,
@@ -113,32 +136,55 @@ class Registration extends Component {
                       selfie/ upload){" "}
                     </Text>
                     <Feather
-                      style={{ paddingLeft: wd * 0.02, opacity: 0.5 }}
+                      style={{ paddingLeft: wd * 0.02, opacity: 0.3 }}
                       name="camera"
-                      size={24}
+                      size={22}
                       color="black"
                     />
                     <Entypo
-                      style={{ paddingLeft: wd * 0.02, opacity: 0.5 }}
+                      style={{ paddingLeft: wd * 0.02, opacity: 0.3 }}
                       name="images"
-                      size={23}
+                      size={22}
                       color="black"
                     />
                   </View>
                 </View>
 
                 <View style={{ width: wd * 0.8 }}>
-                  <View style={{ top: -ht * 0.04, left: wd * 0.1 }}>
+                  <View
+                    style={{
+                      top: -ht * 0.032,
+                      left: wd * 0.12,
+                      width: wd * 0.3,
+                      height: ht * 0.16,
+                      borderRadius: ht * 0.1,
+                      backgroundColor: "lightgrey",
+                      borderColor: "white",
+                    }}
+                  >
                     <TouchableOpacity onPress={this._pickImage}>
-                      <Image
-                        source={{ uri: image }}
-                        style={{
-                          width: wd * 0.3,
-                          height: ht * 0.16,
-                          borderRadius: ht * 0.1,
-                          backgroundColor: "lightgrey",
-                        }}
-                      />
+                      {this.state.image === "null" ? (
+                        <Image
+                          source={require("../assets/Profileicon.png")}
+                          style={{
+                            width: wd * 0.3,
+                            height: ht * 0.16,
+                            borderRadius: ht * 0.1,
+                            backgroundColor: "lightgrey",
+                            borderColor: "white",
+                            borderWidth: 3,
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          source={{ uri: image }}
+                          style={{
+                            width: wd * 0.3,
+                            height: ht * 0.16,
+                            borderRadius: ht * 0.1,
+                          }}
+                        />
+                      )}
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -177,6 +223,16 @@ class Registration extends Component {
                   placeholder="Blood group:"
                   placeholderTextColor="black"
                 />
+                {/* <Picker
+                  selectedValue={selectedValue}
+                  style={styles.input}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState(itemValue)
+                  }
+                >
+                  <Picker.Item label="Java" value="java" />
+                  <Picker.Item label="JavaScript" value="js" />
+                </Picker> */}
                 <TextInput
                   style={styles.address}
                   placeholder="Address"
@@ -193,21 +249,21 @@ class Registration extends Component {
                 <View
                   style={{
                     backgroundColor: "#40C397",
-                    borderRadius: ht * 0.5,
-                    width: wd * 0.127,
+                    borderRadius: ht * 0.8,
+                    width: wd * 0.12,
                     height: ht * 0.06,
                     borderColor: "#40C397",
                     //borderWidth: 1,
                     position: "absolute",
                     left: wd * 0.4,
-                    bottom: -ht * 0.03,
+                    bottom: -ht * 0.035,
                     justifyContent: "center",
                   }}
                 >
                   <AntDesign
                     style={{ alignSelf: "center" }}
                     name="arrowright"
-                    size={32}
+                    size={30}
                     color="white"
                   />
                 </View>
@@ -270,7 +326,9 @@ const styles = StyleSheet.create({
     marginLeft: ht * 0.02,
     paddingLeft: wd * 0.02,
     borderRadius: 5,
-    opacity: 0.7,
+    opacity: 0.45,
+    fontSize: ht * 0.02,
+    fontWeight: "bold",
   },
   address: {
     borderColor: "grey",
@@ -283,13 +341,15 @@ const styles = StyleSheet.create({
     marginLeft: ht * 0.02,
     paddingLeft: wd * 0.02,
     borderRadius: 5,
-    opacity: 0.7,
+    opacity: 0.45,
+    fontSize: ht * 0.02,
+    fontWeight: "bold",
   },
   form: {
     backgroundColor: "white",
     borderRadius: 15,
     width: wd * 0.92,
-    height: ht * 0.75,
+    height: ht * 0.76,
     marginBottom: ht * 0.09,
     borderBottomEndRadius: 5,
     borderBottomLeftRadius: 5,

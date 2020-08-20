@@ -19,7 +19,7 @@ import Constants from "expo-constants";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
@@ -38,7 +38,7 @@ class Registration extends Component {
       // dates: new date(),
       // mode: "",
       // show: "",
-      selectedValue:"java",
+      // selectedValue:"java",
     };
     //const [selectedValue, setSelectedValue] = useState("java");
       // const onChange = (event, selectedDate) => {
@@ -224,7 +224,7 @@ class Registration extends Component {
                   placeholder="Blood group:"
                   placeholderTextColor="black"
                 />
-                <Picker
+                {/* <Picker
                   selectedValue={selectedValue}
                   style={styles.input}
                   onValueChange={(itemValue, itemIndex) =>
@@ -233,7 +233,7 @@ class Registration extends Component {
                 >
                   <Picker.Item label="Java" value="java" />
                   <Picker.Item label="JavaScript" value="js" />
-                </Picker>
+                </Picker> */}
                 <TextInput
                   style={styles.address}
                   placeholder="Address"
