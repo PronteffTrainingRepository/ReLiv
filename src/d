@@ -1,0 +1,15 @@
+
+      input: {
+    borderColor: "grey",
+    borderWidth: 0.5,
+    width: wd * 0.84,
+    height: ht * 0.05,
+    marginTop: ht * 0.008,
+    marginBottom: ht * 0.008,
+    marginLeft: ht * 0.02,
+    paddingLeft: wd * 0.02,
+    borderRadius: 5,
+    opacity: 0.45,
+    fontSize: ht * 0.02,
+    fontWeight: "bold",
+  },

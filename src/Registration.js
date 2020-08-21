@@ -176,15 +176,15 @@ class Registration extends Component {
                           }}
                         />
                       ) : (
-                        <Image
-                          source={{ uri: image }}
-                          style={{
-                            width: wd * 0.3,
-                            height: ht * 0.16,
-                            borderRadius: ht * 0.1,
-                          }}
-                        />
-                      )}
+                          <Image
+                            source={{ uri: image }}
+                            style={{
+                              width: wd * 0.3,
+                              height: ht * 0.16,
+                              borderRadius: ht * 0.1,
+                            }}
+                          />
+                        )}
                     </TouchableOpacity>
                   </View>
                 </View>
