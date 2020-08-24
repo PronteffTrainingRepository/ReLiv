@@ -16,18 +16,20 @@ import {
   Platform,
   Picker,
 } from "react-native";
-import { WebView } from "react-native-webview";
-import MapView from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import DatePicker from "react-native-datepicker";
+import { NavigationContainer } from "@react-navigation/native";
+import MapView from "react-native-maps";
+import { Marker, Callout, mapStyle } from "react-native-maps";
+
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
-function Registrations() {
+function Registrations({ navigation }) {
   const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       {children}
@@ -35,13 +37,14 @@ function Registrations() {
   );
 
   const keyboardVerticalOffset =
-    Platform.OS === "android" ? -ht * 0.25 : -ht * 0.1;
+    Platform.OS === "android" ? "height" : "padding";
 
   const [image, setImage] = useState("null");
   const [date, setDate] = useState("1947-08-15");
   const [value, onChangeText] = React.useState();
   const [selectedValue, setSelectedValue] = useState();
-  const [selecteValue, setSelecteValue] = useState();
+  const [selectValue, setSelectValue] = useState();
+
   useEffect(() => {
     getPermissionAsync();
   }, []);
@@ -90,66 +93,66 @@ function Registrations() {
   const showTimepicker = () => {
     showMode("time");
   };
+  const [markers, changeMarkers] = useState([]);
+
+  const [region, changeRegion] = useState({
+    latitude: 17.4435,
+    longitude: 78.3772,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  onRegionChange = (region) => {
+    changeRegion({ region });
+  };
 
   return (
     // Main View Starts
-    <DismissKeyboard>
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={keyboardVerticalOffset}
-        behavior="position"
-        style={styles.container}
-      >
-        <View style={styles.container}>
-          <StatusBar barStyle="light-content" />
-          <View style={{ marginTop: ht * 0.07, marginBottom: ht * 0.01 }}>
-            <Image
-              style={styles.logo}
-              source={require("../assets/reliv.jpg")}
-            />
-          </View>
-          {/* From starts */}
-          <View style={styles.form}>
-            {/*Header of Form Starts  */}
-            <View
-              style={{
-                backgroundColor: "#3377CA",
-                borderRadius: 15,
-                borderBottomEndRadius: 0,
-                borderBottomLeftRadius: 0,
-                height: ht * 0.06,
-              }}
-            >
-              <Text
+
+    <View style={styles.container}>
+      <ScrollView>
+        <DismissKeyboard>
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={keyboardVerticalOffset}
+            // behavior="position"
+          >
+            <StatusBar barStyle="light-content" />
+            <View style={{ marginTop: ht * 0.05, marginBottom: ht * 0.0 }}>
+              <Image
+                style={styles.logo}
+                source={require("../assets/reliv.jpg")}
+              />
+            </View>
+            {/* From starts */}
+            <View style={styles.form}>
+              {/*Header of Form Starts  */}
+              <View
                 style={{
-                  color: "white",
-                  fontSize: ht * 0.0273,
-                  paddingLeft: wd * 0.038,
-                  paddingTop: wd * 0.025,
-                  opacity: 0.76,
+                  backgroundColor: "#3377CA",
+                  borderRadius: 15,
+                  borderBottomEndRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  height: ht * 0.06,
                 }}
               >
-                Registration
-              </Text>
-            </View>
-            {/* Header Of Form Ends */}
-
-            {/* Image Picker Section Starts */}
-            <View style={{ flexDirection: "row", height: ht * 0.16 }}>
-              <View style={{ marginLeft: wd * 0.038, marginTop: ht * 0.045 }}>
                 <Text
                   style={{
+                    color: "white",
+                    fontSize: ht * 0.026,
+                    paddingLeft: wd * 0.038,
+                    paddingTop: wd * 0.025,
+                    opacity: 0.89,
                     fontWeight: "bold",
-                    opacity: 0.5,
-                    fontSize: ht * 0.02,
                   }}
                 >
-                  Customer pro pic
+                  Registration
                 </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                  }}
-                >
+              </View>
+              {/* Header Of Form Ends */}
+
+              {/* Image Picker Section Starts */}
+              <View style={{ flexDirection: "row", height: ht * 0.16 }}>
+                <View style={{ marginLeft: wd * 0.038, marginTop: ht * 0.045 }}>
                   <Text
                     style={{
                       fontWeight: "bold",
@@ -157,186 +160,226 @@ function Registrations() {
                       fontSize: ht * 0.02,
                     }}
                   >
-                    selfie/ upload){" "}
+                    Customer pro pic
                   </Text>
-                  <Feather
-                    style={{ paddingLeft: wd * 0.02, opacity: 0.3 }}
-                    name="camera"
-                    size={22}
-                    color="black"
-                  />
-                  <Entypo
-                    style={{ paddingLeft: wd * 0.02, opacity: 0.3 }}
-                    name="images"
-                    size={22}
-                    color="black"
-                  />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        opacity: 0.5,
+                        fontSize: ht * 0.02,
+                      }}
+                    >
+                      selfie/ upload){" "}
+                    </Text>
+                    <Feather
+                      style={{ paddingLeft: wd * 0.02, opacity: 0.3 }}
+                      name="camera"
+                      size={22}
+                      color="black"
+                    />
+                    <Entypo
+                      style={{ paddingLeft: wd * 0.02, opacity: 0.3 }}
+                      name="images"
+                      size={22}
+                      color="black"
+                    />
+                  </View>
+                </View>
+
+                <View style={{ width: wd * 0.8 }}>
+                  <View
+                    style={{
+                      top: -ht * 0.032,
+                      left: wd * 0.12,
+                      width: wd * 0.3,
+                      height: ht * 0.16,
+                      borderRadius: ht * 0.1,
+                      backgroundColor: "lightgrey",
+                      borderColor: "white",
+                    }}
+                  >
+                    <TouchableOpacity onPress={_pickImage}>
+                      {image === "null" ? (
+                        <Image
+                          source={require("../assets/Profileicon.png")}
+                          style={{
+                            width: wd * 0.3,
+                            height: ht * 0.16,
+                            borderRadius: ht * 0.1,
+                            backgroundColor: "lightgrey",
+                            borderColor: "white",
+                            borderWidth: 3,
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          source={{ uri: image }}
+                          style={{
+                            width: wd * 0.3,
+                            height: ht * 0.16,
+                            borderRadius: ht * 0.1,
+                          }}
+                        />
+                      )}
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
+              {/* Image Picker Section Ends */}
 
-              <View style={{ width: wd * 0.8 }}>
-                <View
+              {/* Form data Starts */}
+              <View style={{ top: -ht * 0.03 }}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name"
+                  placeholderTextColor="black"
+                />
+                <DatePicker
                   style={{
-                    top: -ht * 0.032,
-                    left: wd * 0.12,
-                    width: wd * 0.3,
-                    height: ht * 0.16,
-                    borderRadius: ht * 0.1,
-                    backgroundColor: "lightgrey",
-                    borderColor: "white",
+                    width: wd * 0.84,
+                    height: ht * 0.05,
+                    marginTop: ht * 0.008,
+                    marginBottom: ht * 0.008,
+                    marginLeft: ht * 0.02,
                   }}
-                >
-                  <TouchableOpacity onPress={_pickImage}>
-                    {image === "null" ? (
-                      <Image
-                        source={require("../assets/Profileicon.png")}
+                  date={date}
+                  mode="date"
+                  //format="DD-MM-YYYY"
+                  minDate="1947-8-01"
+                  maxDate="2020-12-31"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateText: {
+                      opacity: 1,
+                      fontSize: ht * 0.02,
+                      fontWeight: "bold",
+                    },
+                    dateIcon: {
+                      position: "absolute",
+                      right: 0,
+                      top: 4,
+                      marginLeft: 80,
+                    },
+                    dateInput: {
+                      borderRadius: 5,
+                      borderWidth: 0.5,
+                      borderColor: "grey",
+                      opacity: 0.5,
+                      paddingRight: wd * 0.57,
+                    },
+                  }}
+                  onDateChange={(date) => {
+                    setDate(date);
+                  }}
+                />
+                <View style={styles.drop}>
+                  <Picker
+                    selectedValue={selectedValue}
+                    style={{
+                      height: ht * 0.05,
+                      width: wd * 0.85,
+                      opacity: 0.8,
+                    }}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setSelectedValue(itemValue)
+                    }
+                  >
+                    <Picker.Item label="Gender" />
+
+                    <Picker.Item label="Male" value="Male" />
+                    <Picker.Item label="Female" value="Female" />
+                    <Picker.Item label="Others" value="Others" />
+                  </Picker>
+                </View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Occupation"
+                  placeholderTextColor="black"
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Mail Id"
+                  placeholderTextColor="black"
+                />
+                <View style={styles.drop}>
+                  <Picker
+                    selectedValue={selectValue}
+                    style={{
+                      height: ht * 0.05,
+                      width: wd * 0.85,
+                      opacity: 0.8,
+                      fontWeight: "bold",
+                      fontSize: ht * 0.04,
+                    }}
+                    onValueChange={(itemValue) => setSelectValue(itemValue)}
+                  >
+                    <Picker.Item
+                      label="Blood Group"
+                      value=""
+                      itemstyle={{ fontSize: ht * 0.08 }}
+                    />
+
+                    <Picker.Item label="A" value="A" />
+                    <Picker.Item label="B" value="B" />
+                    <Picker.Item label="AB" value="AB" />
+                    <Picker.Item label="O" value="O" />
+                  </Picker>
+                </View>
+
+                <TextInput
+                  style={styles.address}
+                  placeholder="Address"
+                  placeholderTextColor="black"
+                />
+                {/* <TextInput
+                  onFocus={() => navigation.navigate("location")}
+                  style={styles.input}
+                  placeholder="Location"
+                  placeholderTextColor="black"
+                /> */}
+                <View style={styles.mapV}>
+                  <MapView
+                    style={styles.map}
+                    region={region}
+                    onRegionChange={() => onRegionChange}
+                    scrollEnabled={false}
+                  >
+                    <Marker draggable coordinate={region} />
+                  </MapView>
+                  {/* <MapView
+                    style={styles.map}
+                    initialRegion={{
+                      latitude: 37.78825,
+                      longitude: -122.4324,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    }}
+                  /> */}
+
+                  {/* <TouchableOpacity>
+                    <View style={styles.button}>
+                      <Text
                         style={{
-                          width: wd * 0.3,
-                          height: ht * 0.16,
-                          borderRadius: ht * 0.1,
-                          backgroundColor: "lightgrey",
-                          borderColor: "white",
-                          borderWidth: 3,
+                          color: "white",
+                          textAlign: "center",
+                          fontSize: ht * 0.02,
                         }}
-                      />
-                    ) : (
-                      <Image
-                        source={{ uri: image }}
-                        style={{
-                          width: wd * 0.3,
-                          height: ht * 0.16,
-                          borderRadius: ht * 0.1,
-                        }}
-                      />
-                    )}
-                  </TouchableOpacity>
+                      >
+                        Submit Location
+                      </Text>
+                    </View>
+                  </TouchableOpacity> */}
                 </View>
               </View>
-            </View>
-            {/* Image Picker Section Ends */}
-
-            {/* Form data Starts */}
-            <View style={{ top: -ht * 0.03 }}>
-              <TextInput
-                style={styles.input}
-                placeholder="Name"
-                placeholderTextColor="black"
-              />
-              <DatePicker
-                style={{
-                  width: wd * 0.84,
-                  height: ht * 0.05,
-                  marginTop: ht * 0.008,
-                  marginBottom: ht * 0.008,
-                  marginLeft: ht * 0.02,
-                }}
-                date={date}
-                mode="date"
-                //format="DD-MM-YYYY"
-                minDate="1947-8-01"
-                maxDate="2020-12-31"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateText: {
-                    opacity: 1,
-                    fontSize: ht * 0.02,
-                    fontWeight: "bold",
-                  },
-                  dateIcon: {
-                    position: "absolute",
-                    right: 0,
-                    top: 4,
-                    marginLeft: 80,
-                  },
-                  dateInput: {
-                    borderRadius: 5,
-                    borderWidth: 0.5,
-                    borderColor: "grey",
-                    opacity: 0.5,
-                    paddingRight: wd * 0.57,
-                  },
-                  // ... You can check the source to find the other keys.
-                }}
-                onDateChange={(date) => {
-                  setDate(date);
-                }}
-              />
-              <View style={styles.drop}>
-                <Picker
-                  selectedValue={selectedValue}
-                  style={{
-                    height: ht * 0.05,
-                    width: wd * 0.85,
-                    opacity: 0.8,
-                  }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }
-                >
-                  <Picker.Item label="Gender" />
-
-                  <Picker.Item label="Male" value="Male" />
-                  <Picker.Item label="Female" value="Female" />
-                  <Picker.Item label="Others" value="Others" />
-                </Picker>
-              </View>
-              <TextInput
-                style={styles.input}
-                placeholder="Occupation"
-                placeholderTextColor="black"
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Mail id:"
-                placeholderTextColor="black"
-              />
-              <View style={styles.drop}>
-                <Picker
-                  selecteValue={selecteValue}
-                  style={{
-                    height: ht * 0.05,
-                    width: wd * 0.85,
-                    opacity: 0.8,
-                  }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelecteValue(itemValue)
-                  }
-                >
-                  <Picker.Item label="Blood Group" />
-                  <Picker.Item label="-A" value="–A" />
-                  <Picker.Item label="B" value="B" />
-                  <Picker.Item label="AB" value="AB" />
-                  <Picker.Item label="O" value="O" />
-                </Picker>
-              </View>
-              <TextInput
-                style={styles.address}
-                placeholder="Address"
-                placeholderTextColor="black"
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Location"
-                placeholderTextColor="black"
-              />
-              {/* <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15226.40924674226!2d78.37534265712857!3d17.430862731302184!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93fd7f97174f%3A0xfc5d73a7d008d349!2sSilpa%20Gram%20Craft%20Village%2C%20HITEC%20City%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1598016328814!5m2!1sen!2sin"
-                width="600"
-                height="450"
-              ></iframe> */}
-              <WebView
-                originWhitelist={["*"]}
-                source={{ html: "<iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15226.40924674226!2d78.37534265712857!3d17.430862731302184!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93fd7f97174f%3A0xfc5d73a7d008d349!2sSilpa%20Gram%20Craft%20Village%2C%20HITEC%20City%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1598016328814!5m2!1sen!2sin"
-                width="600"
-                height="450"
-              ></iframe>" }}
-              />
-            </View>
-            {/* From data Ends */}
-            <TouchableOpacity>
-              <View
+              {/* From data Ends */}
+              <TouchableOpacity
+                onPress={() => navigation.navigate("bodyparameters")}
                 style={{
                   backgroundColor: "#40C397",
                   borderRadius: ht * 0.8,
@@ -356,14 +399,14 @@ function Registrations() {
                   size={30}
                   color="white"
                 />
-              </View>
-            </TouchableOpacity>
-          </View>
-          {/* Form Ends */}
-        </View>
-        {/* // Main View Ends */}
-      </KeyboardAvoidingView>
-    </DismissKeyboard>
+              </TouchableOpacity>
+            </View>
+            {/* Form Ends */}
+          </KeyboardAvoidingView>
+        </DismissKeyboard>
+      </ScrollView>
+    </View>
+    // {/* // Main View Ends */}
   );
 }
 
@@ -375,7 +418,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1C1853",
     alignItems: "center",
     justifyContent: "center",
-    height: ht * 2,
+    height: ht * 1,
   },
   input: {
     borderColor: "grey",
@@ -424,8 +467,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 15,
     width: wd * 0.92,
-    height: ht * 0.76,
-    marginBottom: ht * 0.09,
+    height: ht * 0.925,
+    marginBottom: ht * 0.08,
     borderBottomEndRadius: 5,
     borderBottomLeftRadius: 5,
   },
@@ -434,5 +477,25 @@ const styles = StyleSheet.create({
     height: wd * 0.25,
     borderRadius: 10,
     alignSelf: "center",
+  },
+  map: {
+    width: wd * 0.83,
+    height: ht * 0.2,
+  },
+  mapV: {
+    marginTop: ht * 0.01,
+    marginBottom: ht * 0.02,
+    borderRadius: 5,
+    overflow: "hidden",
+    width: wd * 0.83,
+    height: ht * 0.2,
+    alignSelf: "center",
+  },
+  button: {
+    width: wd * 0.35,
+    height: ht * 0.06,
+    backgroundColor: "orange",
+    alignSelf: "center",
+    justifyContent: "center",
   },
 });
