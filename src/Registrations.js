@@ -12,7 +12,6 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   StatusBar,
-  Button,
   Platform,
   Picker,
 } from "react-native";
@@ -22,7 +21,6 @@ import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import DatePicker from "react-native-datepicker";
-import { NavigationContainer } from "@react-navigation/native";
 import MapView from "react-native-maps";
 import { Marker, Callout, mapStyle } from "react-native-maps";
 
@@ -30,20 +28,14 @@ const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
 function Registrations({ navigation }) {
-  const DismissKeyboard = ({ children }) => (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      {children}
-    </TouchableWithoutFeedback>
-  );
+  // const DismissKeyboard = ({ children }) => (
+  //   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+  //     {children}
+  //   </TouchableWithoutFeedback>
+  // );
 
   const keyboardVerticalOffset =
-    Platform.OS === "android" ? "height" : "padding";
-
-  const [image, setImage] = useState("null");
-  const [date, setDate] = useState("1947-08-15");
-  const [value, onChangeText] = React.useState();
-  const [selectedValue, setSelectedValue] = useState();
-  const [selectValue, setSelectValue] = useState();
+    Platform.OS === "android" ? -ht * 1 : -ht * 0.1;
 
   useEffect(() => {
     getPermissionAsync();
@@ -105,19 +97,26 @@ function Registrations({ navigation }) {
   onRegionChange = (region) => {
     changeRegion({ region });
   };
-
+  const [image, setImage] = useState("null");
+  const [value, onChangeText] = React.useState();
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [selectedValue, setSelectedValue] = useState("");
+  const [job, setJob] = useState("");
+  const [mail, setMail] = useState("");
+  const [selectValue, setSelectValue] = useState("");
+  const [address, setAddress] = useState("");
   return (
     // Main View Starts
-
-    <View style={styles.container}>
-      <ScrollView>
-        <DismissKeyboard>
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="#1C1853" />
+      <View style={styles.container}>
+        <ScrollView>
           <KeyboardAvoidingView
             keyboardVerticalOffset={keyboardVerticalOffset}
             // behavior="position"
           >
-            <StatusBar barStyle="light-content" />
-            <View style={{ marginTop: ht * 0.05, marginBottom: ht * 0.0 }}>
+            <View style={{ marginTop: ht * 0.02, marginBottom: ht * 0.02 }}>
               <Image
                 style={styles.logo}
                 source={require("../assets/reliv.jpg")}
@@ -141,7 +140,7 @@ function Registrations({ navigation }) {
                     fontSize: ht * 0.026,
                     paddingLeft: wd * 0.038,
                     paddingTop: wd * 0.025,
-                    opacity: 0.89,
+                    opacity: 0.8,
                     fontWeight: "bold",
                   }}
                 >
@@ -238,6 +237,8 @@ function Registrations({ navigation }) {
                   style={styles.input}
                   placeholder="Name"
                   placeholderTextColor="black"
+                  onChangeText={(text) => setName(text)}
+                  value={name}
                 />
                 <DatePicker
                   style={{
@@ -249,9 +250,9 @@ function Registrations({ navigation }) {
                   }}
                   date={date}
                   mode="date"
-                  //format="DD-MM-YYYY"
-                  minDate="1947-8-01"
-                  maxDate="2020-12-31"
+                  format="DD-MM-YYYY"
+                  minDate="01-01-1947"
+                  maxDate="01-12-2031"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{
@@ -301,11 +302,15 @@ function Registrations({ navigation }) {
                   style={styles.input}
                   placeholder="Occupation"
                   placeholderTextColor="black"
+                  onChangeText={(tex) => setJob(tex)}
+                  value={job}
                 />
                 <TextInput
                   style={styles.input}
                   placeholder="Mail Id"
                   placeholderTextColor="black"
+                  onChange={(tex) => setMail(tex)}
+                  value={mail}
                 />
                 <View style={styles.drop}>
                   <Picker
@@ -336,6 +341,8 @@ function Registrations({ navigation }) {
                   style={styles.address}
                   placeholder="Address"
                   placeholderTextColor="black"
+                  onChangeText={(text) => setAddress(text)}
+                  value={address}
                 />
                 {/* <TextInput
                   onFocus={() => navigation.navigate("location")}
@@ -349,6 +356,8 @@ function Registrations({ navigation }) {
                     region={region}
                     onRegionChange={() => onRegionChange}
                     scrollEnabled={false}
+                    zoomEnabled={false}
+                    minZoomLevel={0}
                   >
                     <Marker draggable coordinate={region} />
                   </MapView>
@@ -379,7 +388,30 @@ function Registrations({ navigation }) {
               </View>
               {/* From data Ends */}
               <TouchableOpacity
-                onPress={() => navigation.navigate("bodyparameters")}
+                onPress={() => {
+                  console.log(date);
+                  if (name.length === 0) {
+                    alert("Name is Required");
+                  } else if (name.length >= 16) {
+                    alert("Name Should Not be Greater Than 15 Characters");
+                  } else if (date === "") {
+                    alert("date is required");
+                  } else if (selectedValue === "") {
+                    alert("Gender is required");
+                  } else if (job === "") {
+                    alert("Occupation is required");
+                  } else if (job.length > 10) {
+                    alert("Job Profile Should be Less Than 10 Characters");
+                  } else if (mail === "") {
+                    alert("Email ID is required");
+                  } else if (selectValue === "") {
+                    alert("Blood Group is required");
+                  } else if (address === "") {
+                    alert("Address is required");
+                  } else {
+                    navigation.navigate("bodyparameters");
+                  }
+                }}
                 style={{
                   backgroundColor: "#40C397",
                   borderRadius: ht * 0.8,
@@ -391,6 +423,7 @@ function Registrations({ navigation }) {
                   left: wd * 0.4,
                   bottom: -ht * 0.035,
                   justifyContent: "center",
+                  zIndex: 5,
                 }}
               >
                 <AntDesign
@@ -403,9 +436,9 @@ function Registrations({ navigation }) {
             </View>
             {/* Form Ends */}
           </KeyboardAvoidingView>
-        </DismissKeyboard>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </>
     // {/* // Main View Ends */}
   );
 }
@@ -433,6 +466,7 @@ const styles = StyleSheet.create({
     opacity: 0.45,
     fontSize: ht * 0.02,
     fontWeight: "bold",
+    // fontStyle:"normal"
   },
   drop: {
     borderColor: "grey",

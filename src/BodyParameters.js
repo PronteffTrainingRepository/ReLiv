@@ -36,7 +36,8 @@ function BodyParameters() {
   let [time, setTime] = useState("");
   let [date, setDate] = useState("");
   let [values, setvalues] = useState(initialValues);
-  console.log(values);
+
+  // console.log(values);
 
   useEffect(() => {
     StatusBar.setBarStyle("light-content", true);
@@ -80,25 +81,36 @@ function BodyParameters() {
     setDate((date = fullDate));
   }, []);
 
-  const handleChange = (e, name) => {
-    console.log(e);
-    setvalues({
-      ...values,
-      [name]: e,
-    });
-  };
+  //  const handleChange=(e,name)=>{
+  //         setvalues({
+  //             ...values,
+  //             [name]:e
+  //         })
+  //     }
 
-  restrict = (event) => {
-    const regex = new RegExp("/^[^!-\\/:-@\\[-`{-~]+$/;");
-    const keycode = String.fromCharCode(
-      !event.charCode ? event.which : event.charCode
-    );
-    if (!(keycode == 188) && keycode == 32 && (keycode < 97 || keycode > 122)) {
-      return false;
-    } else {
-      return true;
+  const handleChange = (e, name) => {
+    const input = e;
+    if (/^[0-9.]+$/.test(input) || input === "") {
+      setvalues({
+        ...values,
+        [name]: e,
+      });
     }
   };
+
+  // restrict = (event) => {
+
+  //     const regex = new RegExp("/^[^!-\\/:-@\\[-`{-~]+$/,;");
+  //     const keycode = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+  //     if (!regex.test(keycode)){
+
+  //             event.preventDefault();
+  //             return false;
+  //     }
+  //     else {
+  //         return true;
+  //     }
+  // }
 
   function setWhr() {
     if (values.waist > 0 && values.height > 0) {
@@ -179,11 +191,11 @@ function BodyParameters() {
     }
   }
 
-  console.log("mass", setFat().lbmass);
-  console.log("whrtext", WhrText());
-  console.log("BMI", BMI());
-  console.log("whr", setWhr());
-  console.log("fat", setFat());
+  // console.log('mass',setFat().lbmass);
+  // console.log('whrtext',WhrText());
+  // console.log('BMI',BMI());
+  // console.log('whr',setWhr())
+  // console.log('fat',setFat())
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,7 +205,7 @@ function BodyParameters() {
           <View style={{ justifyContent: "center" }}>
             <Image
               style={styles.logo}
-              source={require("../assets/logo1.png")}
+              source={require("../assets/reliv.jpg")}
               resizeMode="cover"
             />
           </View>
@@ -340,17 +352,12 @@ function BodyParameters() {
                 <Text style={{ fontSize: ht * 0.023 }}>Height</Text>
               </View>
               <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  flex: 1,
-                }}
+                style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
               >
                 <TextInput
                   keyboardType={"numeric"}
                   name="height"
                   value={values.height}
-                  onKeyPress={(e) => restrict(e)}
                   onChangeText={(e) => handleChange(e, "height")}
                   style={styles.inputfield}
                 />
@@ -412,11 +419,7 @@ function BodyParameters() {
               }}
             >
               <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  flex: 1,
-                }}
+                style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
               >
                 <Text style={{ fontSize: ht * 0.023 }}>
                   Circumfrence{" "}
@@ -679,10 +682,7 @@ function BodyParameters() {
                   name="plus"
                   size={12}
                   color="black"
-                  style={{
-                    paddingRight: ht * 0.009,
-                    marginRight: wd * 0.069,
-                  }}
+                  style={{ paddingRight: ht * 0.009, marginRight: wd * 0.069 }}
                 />
                 {/* <MaterialIcons name="notifications-active" style={{backgroundColor:'rgb(31, 224, 242)',borderRadius:ht*0.06,marginRight:wd*0.069 }} size={24} color="white" /> */}
               </View>
@@ -712,8 +712,8 @@ function BodyParameters() {
                         left: setWhr() * (wd * 0.8),
                         top: -ht * 0.005,
                         height: ht * 0.022,
-                        width: ht * 0.022,
-                        backgroundColor: "red",
+                        width: wd * 0.04,
+                        backgroundColor: "rgb(242, 199, 157)",
                         zIndex: 4,
                         borderRadius: ht * 0.5,
                       }}
@@ -759,7 +759,7 @@ function BodyParameters() {
               >
                 <Text style={{ fontSize: ht * 0.023 }}>
                   BodyFat % :-{" "}
-                  <Text style={{ color: "tomato", fontsize: ht * 0.023 }}>
+                  <Text style={{ color: "tomato" }}>
                     {" "}
                     {setFat() <= 0
                       ? null
@@ -770,10 +770,7 @@ function BodyParameters() {
                   name="plus"
                   size={12}
                   color="black"
-                  style={{
-                    paddingRight: ht * 0.009,
-                    marginRight: wd * 0.069,
-                  }}
+                  style={{ paddingRight: ht * 0.009, marginRight: wd * 0.069 }}
                 />
               </View>
               <View
@@ -801,8 +798,8 @@ function BodyParameters() {
                         left: setFat() * wd * 0.008,
                         top: -ht * 0.005,
                         height: ht * 0.022,
-                        width: ht * 0.022,
-                        backgroundColor: "red",
+                        width: wd * 0.04,
+                        backgroundColor: "rgb(242, 199, 157)",
                         zIndex: 4,
                         borderRadius: ht * 0.5,
                       }}
@@ -890,9 +887,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   logo: {
-    height: ht * 0.05,
-    width: ht * 0.05,
-    borderRadius: (ht * 0.05) / 2,
+    height: ht * 0.06,
+    width: ht * 0.06,
+    borderRadius: (ht * 0.06) / 2,
     resizeMode: "cover",
   },
   progress: {
@@ -903,7 +900,6 @@ const styles = StyleSheet.create({
   },
   proview: {
     backgroundColor: "white",
-
     borderTopRightRadius: wd * 0.07,
     borderTopLeftRadius: wd * 0.07,
     elevation: 5,

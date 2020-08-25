@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ReLiv",
-    "slug": "ReLiv",
+    "name": "ReLiv0.1",
+    "slug": "reliv0-1",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -13,14 +13,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "1.0.0",
+    "description": "1.0.1",
     "githubUrl": "https://github.com/PronteffTrainingRepository/ReLiv"
   }
 }
